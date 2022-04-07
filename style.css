@@ -1,0 +1,85 @@
+@import 'OpenColors.css';
+
+* {
+	margin: 0;
+	padding: 0;
+}
+
+.hidden {
+	display: none;
+}
+
+.main {
+	inset: 0;
+	/* margin: auto; */
+
+	width: 100vw;
+	height: 100vh;
+
+	display: grid;
+	place-items: center;
+
+	background-color: var(--oc-gray-9);
+	grid-template:
+		'n n n'
+		'l c r';
+}
+
+.nav,
+.left,
+.center,
+.right {
+	border-radius: 2vh;
+
+	background-color: var(--oc-gray-8);
+	color: white;
+
+	font-size: 8rem;
+	font-family: OCR-A;
+
+	display: grid;
+	place-items: center;
+}
+
+.nav {
+	width: 98.33vw;
+	height: 20vh;
+
+	grid-area: n;
+	color: var(--oc-gray-3);
+	box-shadow: inset 0 0 0 8px var(--oc-gray-4),
+		inset 0 0 0 16px var(--oc-gray-6);
+}
+
+.right,
+.center,
+.left {
+	height: 75vh;
+}
+
+.right {
+	width: 25vw;
+
+	grid-area: r;
+	color: var(--oc-teal-3);
+	box-shadow: inset 0 0 0 8px var(--oc-green-4),
+		inset 0 0 0 16px var(--oc-green-8);
+}
+
+.center {
+	width: 45vw;
+
+	grid-area: c;
+	color: var(--oc-gray-3);
+	box-shadow: inset 0 0 0 8px var(--oc-gray-4),
+		inset 0 0 0 16px var(--oc-gray-6);
+}
+
+.left {
+	width: 25vw;
+
+	grid-area: l;
+	color: var(--oc-pink-3);
+	box-shadow: inset 0 0 0 8px var(--oc-red-4),
+		inset 0 0 0 16px var(--oc-red-8);
+}
