@@ -1,85 +1,150 @@
-@import 'OpenColors.css';
+@import "OpenColors.css";
+
+:root {
+  --w-l: 25vw;
+  --w-c: 45vw;
+  --w-r: 25vw;
+  --w-n: 98.33vw;
+
+  --h-lcr: 75vh;
+  --h-n: 20vh;
+
+  --w-word: calc(var(--w-c) * 0.45);
+  --h-word: calc(var(--h-lcr) * 0.2);
+}
 
 * {
-	margin: 0;
-	padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 .hidden {
-	display: none;
+  display: none;
 }
 
 .main {
-	inset: 0;
-	/* margin: auto; */
+  inset: 0;
+  /* margin: auto; */
 
-	width: 100vw;
-	height: 100vh;
+  width: 100vw;
+  height: 100vh;
 
-	display: grid;
-	place-items: center;
+  display: grid;
+  place-items: center;
 
-	background-color: var(--oc-gray-9);
-	grid-template:
-		'n n n'
-		'l c r';
+  background-color: var(--oc-gray-9);
+  grid-template:
+    "n n n"
+    "l c r";
 }
 
 .nav,
 .left,
 .center,
 .right {
-	border-radius: 2vh;
+  border-radius: 2vh;
 
-	background-color: var(--oc-gray-8);
-	color: white;
+  background-color: var(--oc-gray-8);
+  color: white;
 
-	font-size: 8vh;
-	font-family: OCR-A;
+  font-size: 8vh;
+  font-family: OCR-A, monospace;
 
-	display: grid;
-	place-items: center;
+  display: grid;
+  place-items: center;
 }
 
 .nav {
-	width: 98.33vw;
-	height: 20vh;
+  width: var(--w-n);
+  height: 20vh;
 
-	grid-area: n;
-	color: var(--oc-gray-3);
-	box-shadow: inset 0 0 0 8px var(--oc-gray-4),
-		inset 0 0 0 16px var(--oc-gray-6);
+  grid-area: n;
+  color: var(--oc-gray-3);
+  box-shadow: inset 0 0 0 8px var(--oc-gray-4),
+    inset 0 0 0 16px var(--oc-gray-6);
 }
 
 .right,
 .center,
 .left {
-	height: 75vh;
+  height: var(--h-lcr);
 }
 
 .right {
-	width: 25vw;
+  width: var(--w-r);
 
-	grid-area: r;
-	color: var(--oc-teal-3);
-	box-shadow: inset 0 0 0 8px var(--oc-green-4),
-		inset 0 0 0 16px var(--oc-green-8);
+  grid-area: r;
+  color: var(--oc-teal-3);
+  box-shadow: inset 0 0 0 8px var(--oc-green-4),
+    inset 0 0 0 16px var(--oc-green-8);
 }
 
 .center {
-	width: 45vw;
+  width: var(--w-c);
 
-	grid-area: c;
-	color: var(--oc-gray-3);
-	box-shadow: inset 0 0 0 8px var(--oc-gray-4),
-		inset 0 0 0 16px var(--oc-gray-6);
+  grid-area: c;
+  color: var(--oc-gray-3);
+  box-shadow: inset 0 0 0 8px var(--oc-gray-4),
+    inset 0 0 0 16px var(--oc-gray-6);
 }
 
 .left {
-	width: 25vw;
+  width: var(--w-l);
 
-	grid-area: l;
-	color: var(--oc-pink-3);
-	box-shadow: inset 0 0 0 8px var(--oc-red-4),
-		inset 0 0 0 16px var(--oc-red-8);
+  grid-area: l;
+  color: var(--oc-pink-3);
+  box-shadow: inset 0 0 0 8px var(--oc-red-4), inset 0 0 0 16px var(--oc-red-8);
+}
+
+.word-list {
+  display: grid;
+  place-items: center;
+
+  grid-template:
+    "w1 w2"
+    "w3 w4"
+    "w5 w6"
+    "w7 w8";
+}
+
+.center > .word-list {
+  gap: calc((var(--w-c) - var(--w-word) * 2) / 4);
+}
+
+.word {
+  width: var(--w-word);
+  height: var(--h-word);
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 2vh;
+
+  box-shadow: inset 0 0 0 4px var(--oc-yellow-4),
+    inset 0 0 0 8px var(--oc-yellow-8);
+}
+
+.word.w1 {
+  grid-area: w1;
+}
+.word.w2 {
+  grid-area: w2;
+}
+.word.w3 {
+  grid-area: w3;
+}
+.word.w4 {
+  grid-area: w4;
+}
+.word.w5 {
+  grid-area: w5;
+}
+.word.w6 {
+  grid-area: w6;
+}
+.word.w7 {
+  grid-area: w7;
+}
+.word.w8 {
+  grid-area: w8;
 }
