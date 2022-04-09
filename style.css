@@ -13,9 +13,9 @@
 	--h-word: calc(var(--h-lcr) * 0.2 * 0.7);
 
 	--h-n-all: calc(var(--h-n) * 0.8);
-	--w-n-d: var(--w-l);
-	--w-n-gd: var(--w-c);
-	--w-n-l: var(--w-r);
+	--w-n-d: calc(var(--w-l) * 1);
+	--w-n-gd: calc(var(--w-c) * 1);
+	--w-n-l: calc(var(--w-r) * 1);
 
 	--w-n-gd-all: calc(var(--w-n-gd) / 3 * 0.9);
 	--h-n-gd-all: calc(var(--h-n-all) * 0.8);
@@ -68,7 +68,7 @@
 		inset 0 0 0 1.5vh var(--oc-gray-6);
 
 	grid-template: 'd g g l';
-	gap: 0.75vh;
+	gap: 0.5vh;
 }
 
 .nav > * {
@@ -212,6 +212,7 @@
 }
 
 .movable {
+	display: none; /* for now */
 	position: absolute;
 	left: -10vw;
 	top: -10vh;
