@@ -1,4 +1,5 @@
 @import 'OpenColors.css';
+@import url('http://fonts.cdnfonts.com/css/ocr-a-extended');
 
 :root {
 	--vh: 1vh;
@@ -30,7 +31,7 @@
 * {
 	margin: 0;
 	padding: 0;
-	font-family: OCR-A, monospace;
+	font-family: 'OCR A Extended', sans-serif;
 }
 
 .main {
@@ -142,7 +143,7 @@
 }
 
 .nav > .game-details > .lives {
-	font-size: calc(var(--w-nav-gd) * 0.08);
+	font-size: calc(var(--w-nav-gd) * 0.06);
 	/* overflow: hidden; */
 }
 
@@ -221,14 +222,16 @@
 }
 
 .word {
-	width: var(--w-word);
-	height: var(--h-word);
+	width: calc(var(--w-word) - 2em);
+	height: calc(var(--h-word) - 2em);
 
 	display: grid;
 	place-items: center;
+	place-content: center;
+	padding: 1em;
 
 	border-radius: 2vh;
-	font-size: 4vh;
+	font-size: calc(var(--w-c) * 0.05);
 
 	background-color: var(--oc-gray-8);
 	color: var(--oc-orange-3);
@@ -236,7 +239,7 @@
 		inset 0 0 0 0.8vh var(--oc-yellow-6);
 }
 
-.end-level {
+.continue-button {
 	width: calc(2 * var(--w-word));
 	height: var(--h-word);
 
@@ -244,7 +247,7 @@
 	place-items: center;
 
 	border-radius: 2vh;
-	font-size: 4vh;
+	font-size: calc(var(--w-c) * 0.05);
 
 	background-color: var(--oc-gray-8);
 	color: var(--oc-cyan-3);
@@ -253,14 +256,17 @@
 }
 
 .message {
-	width: calc(var(--w-word) * 2);
-	height: calc(var(--h-word) * 5);
+	width: calc(var(--w-word) * 2 + (var(--w-c) - var(--w-word) * 2) / 8 - 2em);
+	height: calc(
+		var(--h-word) * 4 + 3 * (var(--w-c) - var(--w-word) * 2) / 8 - 2em
+	);
 
 	display: grid;
 	place-items: center;
+	padding: 1em;
 
 	border-radius: 2vh;
-	font-size: 4vh;
+	font-size: calc(var(--w-c) * 0.075);
 
 	background-color: var(--oc-gray-8);
 	color: var(--oc-cyan-3);
@@ -281,10 +287,9 @@
 }
 
 .movable {
-	display: none; /* for now */
 	position: absolute;
-	left: -10vw;
-	top: -10vh;
+	left: 0;
+	top: 0;
 }
 
 .invisible {
