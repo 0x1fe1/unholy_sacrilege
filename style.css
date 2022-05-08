@@ -14,7 +14,7 @@
 	--h-nav: calc(20 * var(--vh));
 
 	--w-word: calc(var(--w-c) * 0.45);
-	--h-word: calc(var(--h-lcr) * 0.2 * 0.7);
+	--h-word: calc(var(--h-lcr) / 6 * 0.75);
 
 	--h-nav-all: calc(var(--h-nav) * 0.8);
 	--w-nav-d: calc(var(--w-l) * 1);
@@ -86,7 +86,6 @@
 	color: var(--oc-gray-4);
 	box-shadow: inset 0 0 0 0.4vh var(--oc-gray-4),
 		inset 0 0 0 0.8vh var(--oc-gray-6);
-	font-size: 6vh;
 }
 
 .nav > .menu {
@@ -134,17 +133,16 @@
 }
 
 .nav > .game-details > .level {
-	font-size: calc(var(--w-nav-gd) * 0.15);
+	font-size: calc(min(var(--w-nav-gd-all), var(--h-nav-gd-all)) * 0.75);
 }
 
 .nav > .game-details > .timer {
-	font-size: calc(var(--w-nav-gd) * 0.15);
+	font-size: calc(min(var(--w-nav-gd-all), var(--h-nav-gd-all)) * 0.8);
 	color: var(--oc-blue-4);
 }
 
 .nav > .game-details > .lives {
-	font-size: calc(var(--w-nav-gd) * 0.06);
-	/* overflow: hidden; */
+	font-size: calc(min(var(--w-nav-gd-all), var(--h-nav-gd-all)) * 0.35);
 }
 
 .nav > .game-details > .lives.l3 {
@@ -163,7 +161,6 @@
 	width: var(--w-nav-l);
 	grid-template-columns: repeat(2, 1fr);
 }
-
 .nav > .links > * {
 	display: grid;
 	place-items: center;
@@ -173,8 +170,11 @@
 }
 
 .center {
+	place-content: none;
+
 	width: var(--w-c);
-	height: var(--h-lcr);
+	height: calc(var(--h-lcr) - 2 * calc(var(--h-lcr) * 0.03));
+	padding: calc(var(--h-lcr) * 0.03);
 
 	grid-area: c;
 	box-shadow: inset 0 0 0 0.75vh var(--oc-gray-4),
@@ -203,8 +203,8 @@
 
 .word-list {
 	display: grid;
-	place-items: center;
-	place-content: center;
+	place-items: start;
+	place-content: start;
 }
 
 .center > .word-list {
@@ -240,7 +240,7 @@
 }
 
 .continue-button {
-	width: calc(2 * var(--w-word));
+	width: calc(2 * var(--w-word) + (var(--w-c) - var(--w-word) * 2) / 8);
 	height: var(--h-word);
 
 	display: grid;
@@ -280,7 +280,7 @@
 		inset 0 0 0 0.8vh var(--oc-green-8);
 }
 
-.word.wrong {
+.word.incorrect {
 	color: var(--oc-pink-4);
 	box-shadow: inset 0 0 0 0.4vh var(--oc-red-6),
 		inset 0 0 0 0.8vh var(--oc-red-8);
