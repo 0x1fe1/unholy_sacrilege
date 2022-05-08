@@ -25,7 +25,7 @@ const CORRECT_KEY = 'correct'
 const INCORRECT_KEY = 'incorrect'
 const WORD_KEYS = [HIDDEN_KEY, INVISIBLE_KEY, CORRECT_KEY, INCORRECT_KEY]
 
-const KOS_KEY = 'kos' // kos <=> костыль //TODO: Придумать Название
+const KOS_KEY = 'kos' // kos <=> костыль
 
 const GAME_STATES = { start: 'START', end: 'END' }
 //#endregion
@@ -42,6 +42,7 @@ let gameState = GAME_STATES.start
 //#endregion
 
 //#region - Event Listeners
+
 dictionary.addEventListener('click', () => {
 	alert('Ещё нет выбора') //TODO
 })
@@ -50,11 +51,21 @@ continueButton.addEventListener('click', () => {
 	handleContinueClick(true)
 })
 
+movableWord.classList.toggle(HIDDEN_KEY, false)
+movableWord.addEventListener('touchmove', (e) => {
+	console.log(e)
+	;[...e.changedTouches].forEach((touch) => {
+		movableWord.style.top = `${touch.pageY}px`
+		movableWord.style.left = `${touch.pageX}px`
+	})
+})
+
 // words.forEach((word) => //TODO
 // 	word.addEventListener('click', () => {
 // 		handleClick.wordMove(word)
 // 	}),
 // )
+
 //#endregion
 
 //#region - Functions
@@ -79,8 +90,7 @@ function restart() {
 	)
 	const rightWords = Array.from(
 		document.querySelector('.right').children[0].children,
-	)
-	//TODO
+	) //TODO
 
 	document.querySelector('.lives').classList.toggle('l1', false)
 	document.querySelector('.lives').classList.toggle('l2', false)
