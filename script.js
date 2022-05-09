@@ -35,7 +35,7 @@ const continueButton = document.querySelector('.continue-button')
 const dictionary = document.querySelector('.dictionary')
 
 const movableWord = document.querySelector('.word.movable')
-const words = document.querySelectorAll('.word')
+const words = document.querySelectorAll('.word:not(.movable)')
 
 let gameState = GAME_STATES.start
 
@@ -51,20 +51,26 @@ continueButton.addEventListener('click', () => {
 	handleContinueClick(true)
 })
 
-movableWord.classList.toggle(HIDDEN_KEY, false)
-movableWord.addEventListener('touchmove', (e) => {
-	console.log(e)
-	;[...e.changedTouches].forEach((touch) => {
-		movableWord.style.top = `${touch.pageY}px`
-		movableWord.style.left = `${touch.pageX}px`
+// dragTouch(movableWord, true)
+// dragMouse(movableWord)
+
+words.forEach((word) => {
+	dragTouch(word)
+	word.addEventListener('touchstart', (e) => {
+		handleWordMovingStart(e, word)
+	})
+	word.addEventListener('touchend', (e) => {
+		handleWordMovingEnd(e, word)
+	})
+
+	dragMouse(word)
+	word.addEventListener('mousedown', (e) => {
+		handleWordMovingStart(e, word)
+	})
+	word.addEventListener('mouseup', (e) => {
+		handleWordMovingEnd(e, word)
 	})
 })
-
-// words.forEach((word) => //TODO
-// 	word.addEventListener('click', () => {
-// 		handleClick.wordMove(word)
-// 	}),
-// )
 
 //#endregion
 
@@ -159,5 +165,92 @@ function updateLives() {
 function handleEndgame() {
 	gameState = GAME_STATES.end
 	console.warn('Game Has Ended') //TODO
+}
+
+function handleWordMovingStart(e, word) {
+	word.style.left = e.target.offsetLeft + 'px'
+	word.style.top = e.target.offsetTop + 'px'
+	word.classList.toggle('movable', true)
+
+	// word.classList.toggle(INVISIBLE_KEY, true)
+	// movableWord.classList.toggle(HIDDEN_KEY, false)
+}
+function handleWordMovingEnd(e, word) {
+	word.classList.toggle('movable', false)
+	// word.classList.toggle(INVISIBLE_KEY, false)
+	// movableWord.classList.toggle(HIDDEN_KEY, true)
+	// movableWord.style.left = -100 + 'px'
+	// movableWord.style.top = -100 + 'px'
+}
+
+function dragTouch(el, kos2) {
+	let pos1 = 0,
+		pos2 = 0,
+		pos3 = 0,
+		pos4 = 0
+
+	el.addEventListener('touchstart', touchStart)
+
+	function touchStart(e) {
+		e = e || window.event
+		e.preventDefault()
+		e = e.changedTouches[0]
+		pos3 = e.clientX
+		pos4 = e.clientY
+		el.addEventListener('touchend', touchEnd)
+		el.addEventListener('touchmove', touchMove)
+	}
+
+	function touchMove(e) {
+		e = e || window.event
+		e.preventDefault()
+		e = e.changedTouches[0]
+		pos1 = pos3 - e.clientX
+		pos2 = pos4 - e.clientY
+		pos3 = e.clientX
+		pos4 = e.clientY
+		el.style.top = el.offsetTop - pos2 + 'px'
+		el.style.left = el.offsetLeft - pos1 + 'px'
+	}
+
+	function touchEnd() {
+		kos2 && el.removeEventListener('touchstart', touchStart)
+		el.removeEventListener('touchend', touchEnd)
+		el.removeEventListener('touchmove', touchMove)
+	}
+}
+
+function dragMouse(el, kos2) {
+	let pos1 = 0,
+		pos2 = 0,
+		pos3 = 0,
+		pos4 = 0
+	el.onmousedown = mouseDown
+
+	function mouseDown(e) {
+		e = e || window.event
+		e.preventDefault()
+		pos3 = e.clientX
+		pos4 = e.clientY
+		document.onmouseup = mouseUp
+		document.onmousemove = mouseMove
+	}
+
+	function mouseMove(e) {
+		e = e || window.event
+		e.preventDefault()
+		pos1 = pos3 - e.clientX
+		pos2 = pos4 - e.clientY
+		pos3 = e.clientX
+		pos4 = e.clientY
+		el.style.top = el.offsetTop - pos2 + 'px'
+		el.style.left = el.offsetLeft - pos1 + 'px'
+	}
+
+	function mouseUp() {
+		kos2 && (document.onmousedown = null)
+		document.onmouseup = null
+		document.onmousemove = null
+	}
 }
 //#endregion
