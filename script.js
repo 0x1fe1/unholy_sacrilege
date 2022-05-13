@@ -55,8 +55,8 @@ let currentWords = { correct: [], incorrect: [] }
 //#region - Event Listeners
 
 dictionaryButton.addEventListener('click', () => {
-	// alert('Ещё нет выбора') //TODO
-	restart()
+	alert('Ещё нет выбора') //TODO
+	// restart()
 })
 
 continueButton.addEventListener('click', () => {
@@ -180,7 +180,7 @@ function updateLives() {
 
 function handleEndgame() {
 	gameState = GAME_STATES.end
-	alert('Game Has Ended') //TODO
+	alert('Вы Проиграли') //TODO
 	restart()
 }
 
