@@ -31,9 +31,14 @@ const GAME_STATES = { start: 'START', end: 'END' }
 //#endregion
 
 const dictionaryButton = document.querySelector('.dictionary')
-const dictionary = WORD_LISTS['test']
+const dictionary = WORD_LISTS.c
 
 const continueButton = document.querySelector('.continue-button')
+const message = document.querySelector('.message')
+const messageTexts = {
+	correct: document.querySelector('.message-correct'),
+	incorrect: document.querySelector('.message-incorrect'),
+}
 
 const leftSection = document.querySelector('.left.section')
 const centerSection = document.querySelector('.center.section')
@@ -43,13 +48,15 @@ const sections = document.querySelectorAll('.section')
 const words = document.querySelectorAll('.word')
 
 let gameState = GAME_STATES.start
+let currentWords = { correct: [], incorrect: [] }
 
 //#endregion
 
 //#region - Event Listeners
 
 dictionaryButton.addEventListener('click', () => {
-	alert('Ещё нет выбора') //TODO
+	// alert('Ещё нет выбора') //TODO
+	restart()
 })
 
 continueButton.addEventListener('click', () => {
@@ -77,6 +84,7 @@ words.forEach((word) => {
 //#endregion
 
 //#region - Functions
+restart()
 function restart() {
 	gameState = GAME_STATES.start
 
@@ -91,12 +99,7 @@ function restart() {
 		})
 	})
 
-	Array.from(document.querySelector('.left').children[0].children).forEach((w) =>
-		w.classList.toggle(INVISIBLE_KEY, true),
-	)
-	Array.from(document.querySelector('.right').children[0].children).forEach((w) =>
-		w.classList.toggle(INVISIBLE_KEY, true),
-	)
+	regenerateWords()
 
 	document.querySelector('.lives').classList.toggle('l1', false)
 	document.querySelector('.lives').classList.toggle('l2', false)
@@ -112,19 +115,29 @@ function handleContinueClick() {
 		return
 	}
 
-	// if (!mistake) {
-	// 	return // no mistakes were made
-	// }
-
 	const [wordList, message, continueButton] = document.querySelector('.center').children
 	wordList.classList.toggle(HIDDEN_KEY)
 	message.classList.toggle(HIDDEN_KEY)
 
 	if (continueButton.classList.contains(KOS_KEY)) {
 		continueButton.classList.toggle(KOS_KEY) // entering next level
+		regenerateWords()
 		return
 	}
 	continueButton.classList.toggle(KOS_KEY) // seeing results
+	const answers = {
+		left: getSectionWords(leftSection, (a) => !a.classList.contains(INVISIBLE_KEY)),
+		right: getSectionWords(rightSection, (a) => !a.classList.contains(INVISIBLE_KEY)),
+	}
+	let [correctAmt1, incorrectAmt1] = colorWords(answers.left, 'INCORRECT')
+	let [correctAmt2, incorrectAmt2] = colorWords(answers.right, 'CORRECT')
+	const correctAmt = correctAmt1 + correctAmt2
+	const incorrectAmt = incorrectAmt1 + incorrectAmt2
+
+	messageTexts.correct.innerText = `Правильно: ${correctAmt}`
+	messageTexts.incorrect.innerText = `Неправильно: ${incorrectAmt}`
+
+	if (incorrectAmt === 0) return
 
 	const lives = document.querySelector('.lives')
 	const life = lives.classList.item(1)
@@ -346,4 +359,159 @@ function getNextWordIndex(section) {
 	const indecies = words.map((word) => getWordIndex(word))
 	return indecies.sort()[0]
 }
+
+function getSectionWords(section, filter = () => true) {
+	const foo = section.querySelectorAll('.word')
+	return Array.from(foo)
+		.sort((a, b) => {
+			const A = getWordIndex(a)
+			const B = getWordIndex(b)
+			return parseInt(A[1]) - parseInt(B[1])
+		})
+		.filter(filter)
+}
+
+function regenerateWords() {
+	getSectionWords(leftSection).forEach((w) => {
+		w.classList.toggle(INVISIBLE_KEY, true)
+		w.classList.toggle(CORRECT_KEY, false)
+		w.classList.toggle(INCORRECT_KEY, false)
+		w.innerText = ''
+	})
+
+	getSectionWords(rightSection).forEach((w) => {
+		w.classList.toggle(INVISIBLE_KEY, true)
+		w.classList.toggle(CORRECT_KEY, false)
+		w.classList.toggle(INCORRECT_KEY, false)
+		w.innerText = ''
+	})
+
+	const wordsToInsert = getWords()
+	getSectionWords(centerSection).forEach((w, i) => {
+		const chosenWord = wordsToInsert[i]
+
+		if (chosenWord == null) {
+			w.classList.toggle(INVISIBLE_KEY, true)
+			w.innerText = ''
+			return
+		}
+
+		w.classList.toggle(INVISIBLE_KEY, false)
+		w.innerText = chosenWord
+	})
+}
+
+function getWords() {
+	const wordAmt = random('i', 2, 8) //getAmount(level)
+	const correctAmt = random('i', 0, Math.min(wordAmt, 6))
+	const incorrectAmt = wordAmt - correctAmt
+	const selectedWords = []
+	console.log(wordAmt, correctAmt, incorrectAmt)
+
+	for (let i = 0; i < correctAmt; i++) {
+		selectedWords.push(random(dictionary.CORRECT))
+	}
+	for (let i = 0; i < incorrectAmt; i++) {
+		selectedWords.push(random(dictionary.INCORRECT))
+	}
+
+	return random('s', selectedWords)
+}
+
+function colorWords(words, key) {
+	let correctAmt = 0
+	let incorrectAmt = 0
+	words.forEach((word) => {
+		const correctness = isCorrect(word.innerText)
+		if (correctness === key) {
+			correctAmt += 1
+			word.classList.toggle(CORRECT_KEY, true)
+			word.classList.toggle(INCORRECT_KEY, false)
+		} else {
+			incorrectAmt += 1
+			word.classList.toggle(CORRECT_KEY, false)
+			word.classList.toggle(INCORRECT_KEY, true)
+		}
+	})
+	return [correctAmt, incorrectAmt]
+}
+
+function isCorrect(word) {
+	if (dictionary.CORRECT.includes(word)) return 'CORRECT'
+	if (dictionary.INCORRECT.includes(word)) return 'INCORRECT'
+	console.error('isCorrect error', arguments)
+}
+
+function random() {
+	const args = Array.from(arguments)
+	if (args.length === 0) return Math.random()
+
+	if (args.length === 1) {
+		if (typeof args[0] === 'number') return Math.random() * args[0]
+		if (Array.isArray(args[0]))
+			return args[0][Math.floor(Math.random() * args[0].length)]
+		return console.error('random function error: ', args)
+	}
+
+	if (args[0] === 'shuffle' || args[0] === 's') {
+		const array = args[1]
+		let currentIndex = array.length,
+			randomIndex
+
+		while (currentIndex != 0) {
+			randomIndex = Math.floor(Math.random() * currentIndex)
+			currentIndex--
+			;[array[currentIndex], array[randomIndex]] = [
+				array[randomIndex],
+				array[currentIndex],
+			]
+		}
+
+		return array
+	}
+
+	if (args[0] === 'int' || args[0] === 'i') {
+		return Math.floor(random(...args.slice(1)))
+	}
+
+	if (args[0] === 'weights' || args[0] === 'w') {
+		const data = args[1]
+		const sum = data.reduce((a, b) => a + b[1], 0)
+		const value = random(sum)
+		for (let i = 0, t = 0; i < data.length; i++) {
+			if (value < t) return data[i - 1][0]
+			t += data[i][1]
+		}
+		return data[data.length - 1][0]
+	}
+
+	if (args[0] === 'divide' || args[0] === 'd') {
+		const num = args[2] ?? 1
+		let value = (args[1] ?? 1) / num
+
+		// const points = new Array(num - 1)
+		// 	.fill()
+		// 	.map((_) => random(value))
+		// 	.sort()
+		// const result = points.map((p, i) => (i == 0 ? p : p - points[i - 1]))
+		// result[num - 1] = value - points[num - 2]
+
+		const result = new Array(num).fill(-1)
+		const n = getNoise(args[3])
+		for (let i = 0; i < num; i++) {
+			value -= result[i] = i === num - 1 ? value : value * n
+		}
+
+		return random('s', result)
+	}
+
+	if (args.length === 2) {
+		if (typeof args[0] === 'number' && typeof args[1] === 'number')
+			return args[0] + (args[1] - args[0]) * Math.random()
+		return console.error('random function error: ', args)
+	}
+
+	return console.error('random function error: ', args)
+}
+
 //#endregion

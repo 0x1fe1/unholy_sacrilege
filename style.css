@@ -315,6 +315,13 @@
 	overflow: hidden;
 }
 
+.message-correct {
+	color: var(--oc-green-4);
+}
+.message-incorrect {
+	color: var(--oc-red-4);
+}
+
 .word.correct {
 	color: var(--oc-teal-4);
 	box-shadow: inset 0 0 0 0.4vh var(--oc-green-6), inset 0 0 0 0.8vh var(--oc-green-8);
